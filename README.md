@@ -1,64 +1,73 @@
-# ajeitaaqui-backend
-API do sistema Ajeita Aqui
+# Ajeita Aqui - Backend
 
-Passo-a-passo para a criação da estrutura do projeto:
+O **Ajeita Aqui** é uma plataforma digital para conectar clientes a prestadores de serviços autônomos (como pedreiros, faxineiros, eletricistas, instaladores, etc). Este repositório tem como objetivo principal a **refatoração e reestruturação** do backend original, aplicando os princípios da **Clean Architecture** para garantir maior modularidade, testabilidade e escalabilidade.
+
+---
+
+## Estrutura da Arquitetura (Clean Architecture)
+
+```text
+apps/
+├── config/                 # Configuração do Django 
+├── domain/                 # Regras de negócio
+│   ├── entities/           # Entidades puras do sistema
+│   └── usecases/           # Casos de uso da aplicação
+├── infrastructure/         # Persistência e serviços externos
+│   ├── db/
+│   └── services/
+├── interface_adapters/     # Camada de interface (Views, Serializers, Controllers)
+│   └── api/
+```
+
+---
+
+## Como rodar o projeto
+
+### 1. Clone o repositório
+
 ```bash
-mkdir apps
-django-admin startproject config apps
-python manage.py startapp core
-mv core apps
-python manage.py startapp infrastructure
-mv infrastructure apps 
-python manage.py startapp api
-mv api apps 
+git clone https://github.com/seu-usuario/ajeita-aqui-backend.git
+cd ajeita-aqui-backend
 ```
 
-```
-+---------------------------+
-| 1. Enterprise Business Rules       -->  core/domain/ 
-+---------------------------+
-| 2. Application Business Rules      -->  core/usecases/
-+---------------------------+
-| 3. Interface Adapters             -->  api/ + infrastructure/repositories/ + serializers/
-+---------------------------+
-| 4. Frameworks & Drivers           -->  infrastructure/models/ + config/ + Django + DRF + DB
-+---------------------------+
+### 2. Crie e ative um ambiente virtual
+
+```bash
+python -m venv env
+source env/bin/activate  # Linux/macOS
+env\Scripts\activate     # Windows
 ```
 
+### 3. Instale as dependências
+
+```bash
+pip install -r requirements.txt
 ```
-/seu_projeto/
-├── manage.py
-├── requirements.txt
-├── apps/
-│   ├── core/                     # Núcleo de regras de negócio (entidades, casos de uso)
-│   │   ├── __init__.py
-│   │   ├── domain/               # Entidades (models do domínio, sem dependência de Django)
-│   │   │   └── user.py
-│   │   └── usecases/            # Casos de uso (serviços da aplicação)
-│   │       └── create_user.py
-│   ├── infrastructure/          # Infraestrutura (ORM, cache, serviços externos)
-│   │   ├── __init__.py
-│   │   ├── models/              # Models do Django (para persistência)
-│   │   │   └── user_model.py
-│   │   ├── repositories/        # Implementações concretas dos repositórios
-│   │   │   └── user_repository.py
-│   │   └── services/            # Integrações externas (email, APIs de terceiros)
-│   │       └── email_service.py
-│   ├── api/                     # Camada de apresentação (entrada de dados)
-│   │   ├── __init__.py
-│   │   ├── views/               # DRF views (controladores)
-│   │   │   └── user_view.py
-│   │   ├── serializers/         # DRF serializers
-│   │   │   └── user_serializer.py
-│   │   └── urls.py              # Rotas da API
-│   └── config/                  # Configuração do Django
-│       ├── __init__.py
-│       ├── settings.py
-│       ├── urls.py
-│       └── wsgi.py
-├── tests/
-│   ├── unit/                    # Testes unitários (core e usecases)
-│   ├── integration/             # Testes com dependências reais (DB, etc)
-│   └── api/                     # Testes de ponta-a-ponta da API
-└── README.md
+
+### 4. Execute as migrações e o servidor
+
+```bash
+python manage.py migrate
+python manage.py runserver
 ```
+
+---
+
+## Rodando os testes
+
+--- # WIP
+
+---
+
+## Documentação da API
+
+--- # WIP
+
+---
+
+## Observações futuras
+
+- Implantação em nuvem planejada com Docker e Docker Compose
+- Integração de funcionalidades como chat em tempo real e pagamento de um serviço contratado
+
+---
