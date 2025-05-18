@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 @dataclass
 class Client:
-    id: int
     first_name: str
     last_name: str
     birth_date: str
@@ -16,3 +15,4 @@ class Client:
     country: str
     photo: str = None
     password: str = None
+    id: int = None
