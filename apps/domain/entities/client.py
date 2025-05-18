@@ -14,5 +14,5 @@ class Client:
     state: str
     zip_code: str
     country: str
-    photo_url: str
+    photo: str = None
     password: str = None

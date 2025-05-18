@@ -8,4 +8,7 @@ class CreateAccountUseCase:
         self.client_repository = client_repository
 
     def save_client(self, client: Client) -> Client:
-        return self.client_repository.create(client)
+        try:
+            self.client_repository.create(client)
+        except Exception as e:
+            raise ClientException(str(e))

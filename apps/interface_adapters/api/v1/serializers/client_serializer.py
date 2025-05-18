@@ -14,9 +14,8 @@ class ClientSerializer(serializers.Serializer):
     state = serializers.CharField()
     zip_code = serializers.CharField()
     country = serializers.CharField()
-    photo_url = serializers.URLField(required=False, allow_blank=True)
+    photo = serializers.ImageField(required=False)
     password = serializers.CharField()
 
     def to_entity(self) -> Client:
-        """Converte os dados validados em uma instância da entidade Client"""
         return Client(**self.validated_data)
