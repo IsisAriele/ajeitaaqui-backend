@@ -1,5 +1,3 @@
-# interface_adapters/api/serializers/client_serializer.py
-
 from rest_framework import serializers
 
 
