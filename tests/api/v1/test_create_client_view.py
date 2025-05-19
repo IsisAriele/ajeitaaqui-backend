@@ -1,11 +1,9 @@
-from rest_framework.test import APITestCase, APIClient
-from rest_framework import status
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient, APITestCase
 
-from apps.infrastructure.models import ClientModel
 
-
-class ClientCreateViewTests(APITestCase):
+class CreateClientViewTests(APITestCase):
     def setUp(self):
         self.api_client = APIClient()
         self.url = reverse("create-client")

@@ -1,12 +1,14 @@
-from django.test import TestCase
-from apps.domain.usecases.authentication.create_account_use_case import CreateAccountUseCase
-from apps.domain.entities.client import Client
-from apps.domain.interfaces.repositories.client_repository import ClientRepository
 from unittest.mock import Mock
+
+from django.test import TestCase
+
+from apps.domain.entities.client import Client
 from apps.domain.exceptions.client_exceptions import ClientException
+from apps.domain.interfaces.repositories.client_repository import ClientRepository
+from apps.domain.usecases.create_client_use_case import CreateClientUseCase
 
 
-class TestCreateAccountUseCase(TestCase):
+class TestCreateClientUseCase(TestCase):
     def setUp(self):
         self.client = Client(
             id="1",
@@ -26,7 +28,7 @@ class TestCreateAccountUseCase(TestCase):
 
     def test_should_call_repository_create_method(self):
         mock_repository = Mock(spec=ClientRepository)
-        use_case = CreateAccountUseCase(mock_repository)
+        use_case = CreateClientUseCase(mock_repository)
 
         use_case.save_client(self.client)
 
@@ -36,7 +38,7 @@ class TestCreateAccountUseCase(TestCase):
         mock_repository = Mock(spec=ClientRepository)
         mock_repository.create.side_effect = Exception("Repository error")
 
-        use_case = CreateAccountUseCase(mock_repository)
+        use_case = CreateClientUseCase(mock_repository)
 
         with self.assertRaises(ClientException) as context:
             use_case.save_client(self.client)

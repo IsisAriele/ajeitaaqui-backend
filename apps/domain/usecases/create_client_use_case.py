@@ -1,9 +1,9 @@
-from apps.domain.interfaces.repositories.client_repository import ClientRepository
 from apps.domain.entities.client import Client
 from apps.domain.exceptions.client_exceptions import ClientException
+from apps.domain.interfaces.repositories.client_repository import ClientRepository
 
 
-class CreateAccountUseCase:
+class CreateClientUseCase:
     def __init__(self, client_repository: ClientRepository):
         self.client_repository = client_repository
 

@@ -1,13 +1,13 @@
 from django.test import TestCase
-from apps.domain.usecases.authentication.create_account_use_case import CreateAccountUseCase
+
 from apps.domain.entities.client import Client
-from apps.domain.interfaces.repositories.client_repository import ClientRepository
-from apps.infrastructure.repositories.client_django_repository import ClientDjangoRepository
 from apps.domain.exceptions.client_exceptions import ClientException
+from apps.domain.usecases.create_client_use_case import CreateClientUseCase
 from apps.infrastructure.models.client_model import ClientModel
+from apps.infrastructure.repositories.client_django_repository import DjangoClientRepository
 
 
-class TestCreateAccountUseCase(TestCase):
+class TestCreateClientUseCase(TestCase):
     def setUp(self):
         self.client = Client(
             id="1",
@@ -26,8 +26,8 @@ class TestCreateAccountUseCase(TestCase):
         )
 
     def test_should_save_client_in_database(self):
-        client_repository = ClientDjangoRepository()
-        use_case = CreateAccountUseCase(client_repository)
+        client_repository = DjangoClientRepository()
+        use_case = CreateClientUseCase(client_repository)
         use_case.save_client(self.client)
 
         client_model = ClientModel.objects.get(email=self.client.email)
@@ -45,8 +45,8 @@ class TestCreateAccountUseCase(TestCase):
         self.assertFalse(client_model.photo)
 
     def test_should_raise_client_exception_when_client_already_registered(self):
-        client_repository = ClientDjangoRepository()
-        use_case = CreateAccountUseCase(client_repository)
+        client_repository = DjangoClientRepository()
+        use_case = CreateClientUseCase(client_repository)
         use_case.save_client(self.client)
 
         with self.assertRaises(ClientException) as context:
