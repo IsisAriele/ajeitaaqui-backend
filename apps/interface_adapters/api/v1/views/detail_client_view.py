@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from apps.domain.usecases.detail_client_use_case import DetailClientUseCase
-from apps.infrastructure.repositories.client_django_repository import DjangoClientRepository
+from apps.infrastructure.repositories.django_client_repository import DjangoClientRepository
 from apps.interface_adapters.api.v1.serializers.client_serializer import ClientSerializer
 
 

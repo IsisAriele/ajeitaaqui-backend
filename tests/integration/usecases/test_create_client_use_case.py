@@ -4,7 +4,7 @@ from apps.domain.entities.client import Client
 from apps.domain.exceptions.client_exceptions import ClientException
 from apps.domain.usecases.create_client_use_case import CreateClientUseCase
 from apps.infrastructure.models.client_model import ClientModel
-from apps.infrastructure.repositories.client_django_repository import DjangoClientRepository
+from apps.infrastructure.repositories.django_client_repository import DjangoClientRepository
 
 
 class TestCreateClientUseCase(TestCase):

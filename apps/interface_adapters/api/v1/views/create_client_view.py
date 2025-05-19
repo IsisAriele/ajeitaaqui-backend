@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from apps.domain.exceptions.client_exceptions import ClientException
 from apps.domain.usecases.create_client_use_case import CreateClientUseCase
-from apps.infrastructure.repositories.client_django_repository import DjangoClientRepository
+from apps.infrastructure.repositories.django_client_repository import DjangoClientRepository
 from apps.interface_adapters.api.v1.serializers.client_serializer import ClientSerializer
 
 
