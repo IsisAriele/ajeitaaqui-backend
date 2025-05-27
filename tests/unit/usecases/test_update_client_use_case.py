@@ -1,11 +1,11 @@
 from unittest.mock import Mock
 
-from apps.domain.usecases.update_client_use_case import UpdateClientUseCase
 from django.test import TestCase
 
 from apps.domain.entities.client import Client
 from apps.domain.exceptions.client_exceptions import ClientException
 from apps.domain.interfaces.repositories.client_repository import ClientRepository
+from apps.domain.usecases.update_client_use_case import UpdateClientUseCase
 
 
 class TestUpdateClientUseCase(TestCase):
@@ -25,7 +25,7 @@ class TestUpdateClientUseCase(TestCase):
             photo=None,
             password="123mudar",
         )
-    
+
     def test_should_call_repository_update_client_method(self):
         mock_repository = Mock(spec=ClientRepository)
         use_case = UpdateClientUseCase(mock_repository)
