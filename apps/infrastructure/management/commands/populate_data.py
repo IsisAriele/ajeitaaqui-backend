@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
-from apps.infrastructure.models import CategoryModel, ServiceModel, PlanModel
+
+from apps.infrastructure.models import CategoryModel, PlanModel, ServiceModel
 
 
 class Command(BaseCommand):

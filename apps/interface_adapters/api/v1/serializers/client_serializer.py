@@ -16,6 +16,7 @@ class ClientSerializer(serializers.Serializer):
     country = serializers.CharField()
     photo = serializers.ImageField(required=False)
     password = serializers.CharField()
+    id = serializers.CharField(read_only=True)
 
     def to_entity(self) -> Client:
         return Client(**self.validated_data)
