@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from apps.infrastructure.models.client_model import ClientModel
+from apps.infrastructure.models.user_models import ClientModel
 
 
 class DetailClientViewTests(APITestCase):

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# ✅ Para deixar claro: esses campos já existem no AbstractUser:
+# Para deixar claro: esses campos já existem no AbstractUser:
 # username (vai ser o e-mail)
 # first_name
 # last_name
