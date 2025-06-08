@@ -1,8 +1,10 @@
 from django.test import TestCase
-from apps.infrastructure.models.user_models import ClientModel
-from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
+
 from apps.domain.usecases.migrate_to_professional_use_case import MigrateToProfessionalUseCase
 from apps.infrastructure.models.professional_models import ProfessionalModel
+from apps.infrastructure.models.user_models import ClientModel
+from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
+
 
 class TestMigrateToProfessionalUseCase(TestCase):
     def setUp(self):
@@ -21,7 +23,7 @@ class TestMigrateToProfessionalUseCase(TestCase):
             photo=None,
             password="123mudar",
         )
-    
+
     def test_should_migrate_client_to_professional(self):
         professional_repository = DjangoProfessionalRepository()
         use_case = MigrateToProfessionalUseCase(professional_repository)
@@ -50,4 +52,7 @@ class TestMigrateToProfessionalUseCase(TestCase):
         with self.assertRaises(Exception) as context:
             use_case.save_professional(self.client_model.id)
 
-        self.assertEqual(str(context.exception), "Failed to create professional: UNIQUE constraint failed: infrastructure_professionalmodel.client_id")
+        self.assertEqual(
+            str(context.exception),
+            "Failed to create professional: UNIQUE constraint failed: infrastructure_professionalmodel.client_id",
+        )
