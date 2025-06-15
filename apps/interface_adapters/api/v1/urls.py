@@ -5,6 +5,7 @@ from apps.interface_adapters.api.v1.views.create_client_view import CreateClient
 from apps.interface_adapters.api.v1.views.create_professional_view import CreateProfessionalView
 from apps.interface_adapters.api.v1.views.detail_client_view import DetailClientView
 from apps.interface_adapters.api.v1.views.profile_client_view import ProfileClientView
+from apps.interface_adapters.api.v1.views.create_portfolio_view import CreatePortfolioView
 
 urlpatterns = [
     path("register/", CreateClientView.as_view(), name="create-client"),
@@ -13,4 +14,5 @@ urlpatterns = [
     path("clients/<str:client_id>/", DetailClientView.as_view(), name="clients"),
     path("me/", ProfileClientView.as_view(), name="me"),
     path("professional/", CreateProfessionalView.as_view(), name="create-professional"),
+    path("portfolio/", CreatePortfolioView.as_view(), name="create-portfolio"),
 ]

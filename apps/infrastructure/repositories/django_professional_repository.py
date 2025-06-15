@@ -30,3 +30,24 @@ class DjangoProfessionalRepository(ProfessionalRepository):
             photo=professional_model.client.photo,
             id=professional_model.id,
         )
+
+    def get_by_id(self, client_id: str) -> Professional:
+        try:
+            professional_model = ProfessionalModel.objects.get(client_id=client_id)
+        except ProfessionalModel.DoesNotExist:
+            raise Exception(f"Professional with id {client_id} does not exist")
+
+        return Professional(
+            first_name=professional_model.client.first_name,
+            last_name=professional_model.client.last_name,
+            birth_date=professional_model.client.birth_date,
+            document=professional_model.client.document,
+            email=professional_model.client.email,
+            phone=professional_model.client.phone,
+            city=professional_model.client.city,
+            state=professional_model.client.state,
+            zip_code=professional_model.client.zip_code,
+            country=professional_model.client.country,
+            photo=professional_model.client.photo,
+            id=professional_model.id,
+        )
