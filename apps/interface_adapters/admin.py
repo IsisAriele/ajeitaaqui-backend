@@ -1,7 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from apps.infrastructure.models import CategoryModel, ClientModel, PlanModel, ProfessionalModel, ServiceModel, PortfolioModel, PortfolioServiceModel
+from apps.infrastructure.models import (
+    CategoryModel,
+    ClientModel,
+    PlanModel,
+    PortfolioModel,
+    PortfolioServiceModel,
+    ProfessionalModel,
+    ServiceModel,
+)
 
 admin.site.register(ClientModel, UserAdmin)
 admin.site.register(CategoryModel)

@@ -35,7 +35,7 @@ class DjangoProfessionalRepository(ProfessionalRepository):
         try:
             professional_model = ProfessionalModel.objects.get(client_id=client_id)
         except ProfessionalModel.DoesNotExist:
-            raise Exception(f"Professional with id {client_id} does not exist")
+            raise Exception(f"Professional not found.")
 
         return Professional(
             first_name=professional_model.client.first_name,

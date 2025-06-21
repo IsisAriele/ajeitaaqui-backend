@@ -1,7 +1,8 @@
 from dataclasses import dataclass
-from apps.domain.entities.service import Service
-from apps.domain.entities.professional import Professional
 from typing import List
+
+from apps.domain.entities.service import Service
+
 
 @dataclass
 class Portfolio:

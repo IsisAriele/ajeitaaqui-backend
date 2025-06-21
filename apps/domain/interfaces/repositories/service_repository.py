@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from apps.domain.entities.service import Service
+
 
 class ServiceRepository(ABC):
     @abstractmethod

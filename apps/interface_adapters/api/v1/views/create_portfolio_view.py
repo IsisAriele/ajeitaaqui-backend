@@ -4,12 +4,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
+from apps.domain.usecases.manage_portfolio_use_case import ManagePortfolioUseCase
 from apps.infrastructure.repositories.django_portfolio_repository import DjangoPortfolioRepository
-from apps.domain.entities.professional import Professional
-from apps.domain.usecases.manage_portfolio import ManagePortfolioUseCase
+from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
 from apps.infrastructure.repositories.django_service_repository import DjangoServiceRepository
 from apps.interface_adapters.api.v1.serializers.portfolio_serializer import PortfolioSerializer
+
 
 class CreatePortfolioView(APIView):
     authentication_classes = [JWTAuthentication]
@@ -22,7 +22,7 @@ class CreatePortfolioView(APIView):
 
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
         portfolio = serializer.to_entity(client_id)
 
         professional_repository = DjangoProfessionalRepository()
