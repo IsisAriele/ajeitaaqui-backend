@@ -1,0 +1,2 @@
+class PortfolioException(Exception):
+    pass
