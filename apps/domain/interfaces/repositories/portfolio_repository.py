@@ -7,3 +7,11 @@ class PortfolioRepository(ABC):
     @abstractmethod
     def create(self, portfolio: Portfolio) -> dict:
         pass
+
+    @abstractmethod
+    def get_portfolio_by_professional_id(self, professional_id: str) -> Portfolio:
+        pass
+
+    @abstractmethod
+    def update(self, portfolio: Portfolio) -> dict:
+        pass
