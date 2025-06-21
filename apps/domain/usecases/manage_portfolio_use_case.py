@@ -21,11 +21,7 @@ class ManagePortfolioUseCase:
         self.service_repository = service_repository
 
     def create_portfolio(self, portfolio: Portfolio):
-        try:
-            portfolio.professional_id = self.professional_repository.get_by_id(portfolio.professional_id).id
-        except Exception as e:
-            raise ProfessionalException(str(e))
-
+        portfolio.professional_id = self.get_professional_id(portfolio.professional_id)
         portfolio.services = self.parse_services(portfolio.services)
 
         try:
@@ -33,7 +29,25 @@ class ManagePortfolioUseCase:
         except Exception as e:
             raise PortfolioException(str(e))
 
+    def update_portfolio(self, portfolio: Portfolio):
+        portfolio.professional_id = self.get_professional_id(portfolio.professional_id)
+        portfolio.services = self.parse_services(portfolio.services)
+
+        try:
+            self.portfolio_repository.update(portfolio)
+        except Exception as e:
+            raise PortfolioException(str(e))
+
+    def get_professional_id(self, professional_id: str):
+        try:
+            return self.professional_repository.get_by_id(professional_id).id
+        except Exception as e:
+            raise ProfessionalException(str(e))
+
     def parse_services(self, incomming_services: List[int]):
+        if not incomming_services:
+            raise PortfolioException("Services list cannot be empty.")
+
         services = list()
         for service_id in incomming_services:
             try:

@@ -5,7 +5,7 @@ from rest_framework.test import APIClient, APITestCase
 from apps.infrastructure.models import CategoryModel, ClientModel, PortfolioModel, ProfessionalModel, ServiceModel
 
 
-class CreatePortfolioViewTests(APITestCase):
+class ManagePortfolioViewsTests(APITestCase):
     def setUp(self):
         self.api_client = APIClient()
         self.client_model = ClientModel.objects.create(
@@ -38,7 +38,7 @@ class CreatePortfolioViewTests(APITestCase):
                 description=f"Service {i}",
             )
 
-        self.url = reverse("create-portfolio")
+        self.url = reverse("manage-portfolio")
         self.api_client.force_authenticate(user=self.client_model)
 
     def test_create_portfolio_success(self):
@@ -92,7 +92,7 @@ class CreatePortfolioViewTests(APITestCase):
             data={
                 "image_url": "http://example.com/image.jpg",
                 "description": "This is a test portfolio",
-                "services": [999],  # Non-existent service ID
+                "services": [999],
             },
             format="json",
         )
@@ -104,7 +104,7 @@ class CreatePortfolioViewTests(APITestCase):
     def test_create_portfolio_already_exists(self):
         PortfolioModel.objects.create(
             professional=self.professional_model,
-            image_url="http://example.com/image.jpg",
+            image="http://example.com/image.jpg",
             description="This is a test portfolio",
         )
 
@@ -121,3 +121,69 @@ class CreatePortfolioViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("message", response.data)
         self.assertEqual(response.data["message"], "Portfolio already exists for this professional.")
+
+    def test_update_portfolio_success(self):
+        PortfolioModel.objects.create(
+            professional=self.professional_model,
+            image="http://example.com/image.jpg",
+            description="This is a test portfolio",
+        )
+
+        response = self.api_client.put(
+            self.url,
+            data={
+                "image_url": "http://example.com/image.jpg",
+                "description": "This is a test portfolio",
+                "services": [1, 2, 3],
+            },
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_update_portfolio_professional_not_found(self):
+        client_without_professional_model = ClientModel.objects.create(
+            id="2",
+            first_name="Nome1",
+            last_name="Sobrenome1",
+            birth_date="1999-12-31",
+            document="xxx.xxx.xxx-xy",
+            email="nome1@ifrn.com.br",
+            username="nome1@ifrn.com.br",
+            phone="8499999-9998",
+            city="Natal",
+            state="RN",
+            zip_code="59000-000",
+            country="BR",
+            photo=None,
+            password="123mudar",
+        )
+        self.api_client.force_authenticate(user=client_without_professional_model)
+
+        response = self.api_client.put(
+            self.url,
+            data={
+                "image_url": "http://example.com/image.jpg",
+                "description": "This is a test portfolio",
+                "services": [1, 2, 3],
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("message", response.data)
+        self.assertEqual(response.data["message"], "Professional not found.")
+
+    def test_update_portfolio_service_not_found(self):
+        response = self.api_client.put(
+            self.url,
+            data={
+                "image_url": "http://example.com/image.jpg",
+                "description": "This is a test portfolio",
+                "services": [999],
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("message", response.data)
+        self.assertEqual(response.data["message"], "Service with id 999 does not exist.")

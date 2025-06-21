@@ -11,7 +11,7 @@ from apps.infrastructure.repositories.django_service_repository import DjangoSer
 from apps.interface_adapters.api.v1.serializers.portfolio_serializer import PortfolioSerializer
 
 
-class CreatePortfolioView(APIView):
+class ManagePortfolioViews(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -42,4 +42,33 @@ class CreatePortfolioView(APIView):
         return Response(
             {"message": "Portfolio created successfully"},
             status=status.HTTP_201_CREATED,
+        )
+
+    def put(self, request):
+        client_id = request.user.id
+
+        serializer = PortfolioSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        portfolio = serializer.to_entity(client_id)
+
+        professional_repository = DjangoProfessionalRepository()
+        portfolio_repository = DjangoPortfolioRepository()
+        service_repository = DjangoServiceRepository()
+
+        use_case = ManagePortfolioUseCase(professional_repository, portfolio_repository, service_repository)
+
+        try:
+            use_case.update_portfolio(portfolio)
+        except Exception as e:
+            return Response(
+                {"message": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {"message": "Portfolio updated successfully"},
+            status=status.HTTP_200_OK,
         )
