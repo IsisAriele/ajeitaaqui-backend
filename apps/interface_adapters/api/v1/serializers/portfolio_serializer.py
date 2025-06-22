@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.domain.entities.portfolio import Portfolio
+from apps.interface_adapters.api.v1.serializers.service_serializer import ServiceSerializer
 
 
 class PortfolioSerializer(serializers.Serializer):
@@ -16,3 +17,22 @@ class PortfolioSerializer(serializers.Serializer):
             image_url=self.validated_data.get("image"),
             services=self.validated_data.get("services"),
         )
+
+
+class PortfolioDetailSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    professional_id = serializers.CharField(read_only=True)
+    description = serializers.CharField()
+    image_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    services = ServiceSerializer(many=True)
+
+    @classmethod
+    def from_entity(cls, portfolio: Portfolio):
+        data = {
+            "id": portfolio.id,
+            "professional_id": portfolio.professional_id,
+            "description": portfolio.description,
+            "image_url": portfolio.image_url,
+            "services": [ServiceSerializer(service).data for service in portfolio.services],
+        }
+        return cls(data)

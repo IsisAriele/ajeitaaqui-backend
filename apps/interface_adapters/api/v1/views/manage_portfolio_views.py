@@ -8,7 +8,10 @@ from apps.domain.usecases.manage_portfolio_use_case import ManagePortfolioUseCas
 from apps.infrastructure.repositories.django_portfolio_repository import DjangoPortfolioRepository
 from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
 from apps.infrastructure.repositories.django_service_repository import DjangoServiceRepository
-from apps.interface_adapters.api.v1.serializers.portfolio_serializer import PortfolioSerializer
+from apps.interface_adapters.api.v1.serializers.portfolio_serializer import (
+    PortfolioDetailSerializer,
+    PortfolioSerializer,
+)
 
 
 class ManagePortfolioViews(APIView):
@@ -72,3 +75,24 @@ class ManagePortfolioViews(APIView):
             {"message": "Portfolio updated successfully"},
             status=status.HTTP_200_OK,
         )
+
+    def get(self, request):
+        client_id = request.user.id
+
+        professional_repository = DjangoProfessionalRepository()
+        portfolio_repository = DjangoPortfolioRepository()
+        service_repository = DjangoServiceRepository()
+
+        use_case = ManagePortfolioUseCase(professional_repository, portfolio_repository, service_repository)
+
+        try:
+            portfolio = use_case.get_portfolio_by_client_id(client_id)
+        except Exception as e:
+            return Response(
+                {"message": str(e)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        serializer = PortfolioDetailSerializer.from_entity(portfolio)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)

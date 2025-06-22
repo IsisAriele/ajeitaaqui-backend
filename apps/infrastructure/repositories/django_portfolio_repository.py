@@ -36,7 +36,8 @@ class DjangoPortfolioRepository(PortfolioRepository):
             image_url=portfolio_model.image.url if portfolio_model.image else None,
             description=portfolio_model.description,
             services=[
-                Service(id=service.id, description=service.description) for service in portfolio_model.services.all()
+                Service(id=portfolio_service.service.id, description=portfolio_service.service.description)
+                for portfolio_service in portfolio_model.portfolio_services.all()
             ],
         )
 
@@ -64,3 +65,20 @@ class DjangoPortfolioRepository(PortfolioRepository):
         portfolio_model.save()
 
         return portfolio
+
+    def get(self, portfolio_id: str) -> Portfolio:
+        try:
+            portfolio_model = PortfolioModel.objects.get(id=portfolio_id)
+        except PortfolioModel.DoesNotExist:
+            raise Exception("Portfolio not found.")
+
+        return Portfolio(
+            id=portfolio_model.id,
+            professional_id=portfolio_model.professional_id,
+            image_url=portfolio_model.image.url if portfolio_model.image else None,
+            description=portfolio_model.description,
+            services=[
+                Service(id=portfolio_service.service.id, description=portfolio_service.service.description)
+                for portfolio_service in portfolio_model.portfolio_services.all()
+            ],
+        )

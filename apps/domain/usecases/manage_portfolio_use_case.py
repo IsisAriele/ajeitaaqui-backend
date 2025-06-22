@@ -38,9 +38,9 @@ class ManagePortfolioUseCase:
         except Exception as e:
             raise PortfolioException(str(e))
 
-    def get_professional_id(self, professional_id: str):
+    def get_professional_id(self, client_id: str):
         try:
-            return self.professional_repository.get_by_id(professional_id).id
+            return self.professional_repository.get_by_id(client_id).id
         except Exception as e:
             raise ProfessionalException(str(e))
 
@@ -56,3 +56,13 @@ class ManagePortfolioUseCase:
                 raise ServiceException(str(e))
 
         return services
+
+    def get_portfolio_by_client_id(self, client_id: str) -> Portfolio:
+        professional_id = self.get_professional_id(client_id)
+
+        try:
+            portfolio = self.portfolio_repository.get_portfolio_by_professional_id(professional_id)
+        except Exception as e:
+            raise PortfolioException(str(e))
+
+        return portfolio

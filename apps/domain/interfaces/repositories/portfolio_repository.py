@@ -15,3 +15,7 @@ class PortfolioRepository(ABC):
     @abstractmethod
     def update(self, portfolio: Portfolio) -> dict:
         pass
+
+    @abstractmethod
+    def get(self, portfolio_id: str) -> Portfolio:
+        pass
