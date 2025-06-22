@@ -2,7 +2,14 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
-from apps.infrastructure.models import CategoryModel, ClientModel, PortfolioModel, ProfessionalModel, ServiceModel
+from apps.infrastructure.models import (
+    CategoryModel,
+    ClientModel,
+    PortfolioModel,
+    PortfolioServiceModel,
+    ProfessionalModel,
+    ServiceModel,
+)
 
 
 class ManagePortfolioViewsTests(APITestCase):
@@ -32,10 +39,13 @@ class ManagePortfolioViewsTests(APITestCase):
             description="Category 1",
         )
 
+        self.available_services = list()
         for i in range(1, 4):
-            ServiceModel.objects.create(
-                category=self.category_model,
-                description=f"Service {i}",
+            self.available_services.append(
+                ServiceModel.objects.create(
+                    category=self.category_model,
+                    description=f"Service {i}",
+                )
             )
 
         self.url = reverse("manage-portfolio")
@@ -187,3 +197,47 @@ class ManagePortfolioViewsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("message", response.data)
         self.assertEqual(response.data["message"], "Service with id 999 does not exist.")
+
+    def test_get_portfolio_by_client_id_success(self):
+        PortfolioModel.objects.create(
+            professional=self.professional_model,
+            image="http://example.com/image.jpg",
+            description="This is a test portfolio",
+        )
+
+        for service_model in self.available_services:
+            PortfolioServiceModel.objects.create(
+                portfolio=self.professional_model.portfolio,
+                service=service_model,
+            )
+
+        response = self.api_client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["professional_id"], str(self.professional_model.id))
+        self.assertEqual(response.data["description"], "This is a test portfolio")
+        self.assertEqual(len(response.data["services"]), len(self.available_services))
+
+    def test_get_portfolio_by_client_id_not_found(self):
+        client_model = ClientModel.objects.create(
+            first_name="Nome",
+            last_name="Sobrenome",
+            birth_date="1999-12-31",
+            document="xxx.xxx.xxx-xy",
+            email="nome1@ifrn.com.br",
+            username="nome1@ifrn.com.br",
+            phone="8499999-9998",
+            city="Natal",
+            state="RN",
+            zip_code="59000-000",
+            country="BR",
+            photo=None,
+            password="123mudar",
+        )
+        ProfessionalModel.objects.create(
+            client=client_model,
+        )
+        self.api_client.force_authenticate(user=client_model)
+        response = self.api_client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("message", response.data)
+        self.assertEqual(response.data["message"], "Portfolio not found for this professional.")
