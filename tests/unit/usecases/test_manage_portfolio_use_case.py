@@ -162,3 +162,34 @@ class TestManagePortfolioUseCase(unittest.TestCase):
             use_case.create_portfolio(self.portfolio)
 
         self.assertEqual(str(context.exception), "Services list cannot be empty.")
+
+    def test_get_portfolio_by_client_id_test_should_create_portfolio_success(self):
+        mock_professional_repository = Mock(spec=ProfessionalRepository)
+        mock_portfolio_repository = Mock(spec=PortfolioRepository)
+        mock_service_repository = Mock(spec=ServiceRepository)
+
+        use_case = ManagePortfolioUseCase(
+            mock_professional_repository, mock_portfolio_repository, mock_service_repository
+        )
+        mock_professional_repository.get_by_id.return_value = self.professional
+        mock_portfolio_repository.get_portfolio_by_professional_id.return_value = self.portfolio
+
+        portfolio = use_case.get_portfolio_by_client_id("1")
+
+        self.assertEqual(portfolio, self.portfolio)
+        mock_portfolio_repository.get_portfolio_by_professional_id.assert_called_once_with("1")
+
+    def test_get_portfolio_by_client_id_should_raise_exception_when_professional_not_found(self):
+        mock_professional_repository = Mock(spec=ProfessionalRepository)
+        mock_portfolio_repository = Mock(spec=PortfolioRepository)
+        mock_service_repository = Mock(spec=ServiceRepository)
+
+        use_case = ManagePortfolioUseCase(
+            mock_professional_repository, mock_portfolio_repository, mock_service_repository
+        )
+        mock_professional_repository.get_by_id.side_effect = Exception("Professional not found")
+
+        with self.assertRaises(ProfessionalException) as context:
+            use_case.get_portfolio_by_client_id("1")
+
+        self.assertEqual(str(context.exception), "Professional not found")
