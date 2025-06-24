@@ -107,7 +107,7 @@ Uma boa solução seria desenvolver **uma plataforma de classificados de serviç
 | RF06   | Apresentar profissionais melhor avaliados | Apresentar profissionais melhor avaliados mensalmente             |
 | RF07   | Favoritar profissional          | Salvar profissionais de interesse                                         |
 | RF08   | Avaliar serviço                 | Avaliar serviço prestado                                                  |
-| RF09   | Gerenciar ofertas               | Criar, editar e excluir ofertas                                           |
+| RF09   | Gerenciar portfólio               | Criar, editar e excluir portfólio                                           |
 | RF10   | Sistema de mensagens (Chat)     | Comunicação entre usuário e profissional na plataforma                    |
 
 ---
