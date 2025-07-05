@@ -20,3 +20,11 @@ class PortfolioRepository(ABC):
     @abstractmethod
     def list_all(self) -> List[Portfolio]:
         pass
+
+    @abstractmethod
+    def list_by_service_name(self, service_name: str) -> List[Portfolio]:
+        pass
+
+    @abstractmethod
+    def list_by_professional_name(self, professional_name: str) -> List[Portfolio]:
+        pass

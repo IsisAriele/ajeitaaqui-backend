@@ -1,3 +1,5 @@
+from django.db import models
+
 from apps.domain.entities.portfolio import Portfolio
 from apps.domain.entities.service import Service
 from apps.domain.interfaces.repositories.portfolio_repository import PortfolioRepository
@@ -68,6 +70,45 @@ class DjangoPortfolioRepository(PortfolioRepository):
     def list_all(self):
         portfolios = []
         for portfolio_model in PortfolioModel.objects.all():
+            portfolios.append(
+                Portfolio(
+                    id=portfolio_model.id,
+                    professional_id=portfolio_model.professional_id,
+                    image_url=portfolio_model.image.url if portfolio_model.image else None,
+                    description=portfolio_model.description,
+                    services=[
+                        Service(id=ps.service.id, description=ps.service.description)
+                        for ps in portfolio_model.portfolio_services.all()
+                    ],
+                )
+            )
+        return portfolios
+
+    def list_by_service_name(self, service_name: str):
+        portfolios = []
+        for portfolio_model in PortfolioModel.objects.filter(
+            portfolio_services__service__description__icontains=service_name
+        ):
+            portfolios.append(
+                Portfolio(
+                    id=portfolio_model.id,
+                    professional_id=portfolio_model.professional_id,
+                    image_url=portfolio_model.image.url if portfolio_model.image else None,
+                    description=portfolio_model.description,
+                    services=[
+                        Service(id=ps.service.id, description=ps.service.description)
+                        for ps in portfolio_model.portfolio_services.all()
+                    ],
+                )
+            )
+        return portfolios
+
+    def list_by_professional_name(self, professional_name: str):
+        portfolios = []
+        for portfolio_model in PortfolioModel.objects.filter(
+            models.Q(professional__client__first_name__icontains=professional_name)
+            | models.Q(professional__client__last_name__icontains=professional_name)
+        ):
             portfolios.append(
                 Portfolio(
                     id=portfolio_model.id,
