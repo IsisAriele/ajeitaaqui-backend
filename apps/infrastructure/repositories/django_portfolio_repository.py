@@ -64,3 +64,20 @@ class DjangoPortfolioRepository(PortfolioRepository):
         portfolio_model.save()
 
         return portfolio
+
+    def list_all(self):
+        portfolios = []
+        for portfolio_model in PortfolioModel.objects.all():
+            portfolios.append(
+                Portfolio(
+                    id=portfolio_model.id,
+                    professional_id=portfolio_model.professional_id,
+                    image_url=portfolio_model.image.url if portfolio_model.image else None,
+                    description=portfolio_model.description,
+                    services=[
+                        Service(id=ps.service.id, description=ps.service.description)
+                        for ps in portfolio_model.portfolio_services.all()
+                    ],
+                )
+            )
+        return portfolios

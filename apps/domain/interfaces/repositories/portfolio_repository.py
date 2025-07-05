@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from apps.domain.entities.portfolio import Portfolio
 
@@ -14,4 +15,8 @@ class PortfolioRepository(ABC):
 
     @abstractmethod
     def update(self, portfolio: Portfolio) -> dict:
+        pass
+
+    @abstractmethod
+    def list_all(self) -> List[Portfolio]:
         pass
