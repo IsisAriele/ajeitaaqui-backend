@@ -7,6 +7,7 @@ from apps.interface_adapters.api.v1.views.detail_client_view import DetailClient
 from apps.interface_adapters.api.v1.views.list_portfolios_view import ListPortfoliosView
 from apps.interface_adapters.api.v1.views.manage_portfolio_views import ManagePortfolioViews
 from apps.interface_adapters.api.v1.views.profile_client_view import ProfileClientView
+from apps.interface_adapters.api.v1.views.search_portfolios_views import SearchPortfolioView
 
 urlpatterns = [
     path("register/", CreateClientView.as_view(), name="create-client"),
@@ -17,4 +18,5 @@ urlpatterns = [
     path("professional/", CreateProfessionalView.as_view(), name="create-professional"),
     path("manage/portfolios/", ManagePortfolioViews.as_view(), name="manage-portfolio"),
     path("portfolios/", ListPortfoliosView.as_view(), name="list-portfolios"),
+    path("search/portfolios/", SearchPortfolioView.as_view(), name="search-portfolios"),
 ]
