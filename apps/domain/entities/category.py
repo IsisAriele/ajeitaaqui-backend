@@ -5,4 +5,4 @@ from dataclasses import dataclass
 class Category:
     id: int
     description: str
-    icon_url: str
+    icon_url: str = None

@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from apps.interface_adapters.api.v1.views.create_client_view import CreateClientView
 from apps.interface_adapters.api.v1.views.create_professional_view import CreateProfessionalView
 from apps.interface_adapters.api.v1.views.detail_client_view import DetailClientView
+from apps.interface_adapters.api.v1.views.list_categories_views import ListCategoriesView
 from apps.interface_adapters.api.v1.views.list_portfolios_view import ListPortfoliosView
 from apps.interface_adapters.api.v1.views.manage_portfolio_views import ManagePortfolioViews
 from apps.interface_adapters.api.v1.views.profile_client_view import ProfileClientView
@@ -19,4 +20,5 @@ urlpatterns = [
     path("manage/portfolios/", ManagePortfolioViews.as_view(), name="manage-portfolio"),
     path("portfolios/", ListPortfoliosView.as_view(), name="list-portfolios"),
     path("search/portfolios/", SearchPortfolioView.as_view(), name="search-portfolios"),
+    path("categories/", ListCategoriesView.as_view(), name="list-categories"),
 ]
