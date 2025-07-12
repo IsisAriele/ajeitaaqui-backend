@@ -11,3 +11,7 @@ class ProposalRepository(ABC):
     @abstractmethod
     def list_proposals_by_professional(self, professional_id: str):
         pass
+
+    @abstractmethod
+    def list_proposals_by_client(self, client_id: str):
+        pass

@@ -5,3 +5,7 @@ format:
 
 test:
 	python manage.py test
+
+coverage:
+	coverage run manage.py test
+	coverage report
