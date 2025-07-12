@@ -4,6 +4,26 @@ from apps.domain.entities.professional import Client, Professional
 from apps.domain.entities.proposal import Proposal
 
 
+class SimpleClientSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    first_name = serializers.CharField(max_length=100, read_only=True)
+    last_name = serializers.CharField(max_length=100, read_only=True)
+
+
+class SimplesServiceSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    description = serializers.CharField(max_length=255, read_only=True)
+
+
+class ListProposalsSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    value = serializers.FloatField(read_only=True)
+    scheduled_datetime = serializers.DateTimeField(read_only=True)
+    client = SimpleClientSerializer(read_only=True)
+    services = serializers.ListField(child=SimplesServiceSerializer(), read_only=True)
+    confirmed = serializers.BooleanField(read_only=True)
+
+
 class ProposalSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     value = serializers.FloatField()
