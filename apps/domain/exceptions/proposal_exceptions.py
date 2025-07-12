@@ -1,0 +1,2 @@
+class ProposalException(Exception):
+    pass
