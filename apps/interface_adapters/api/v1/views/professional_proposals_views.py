@@ -6,11 +6,12 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from apps.domain.exceptions.proposal_exceptions import ProposalException
 from apps.domain.usecases.create_proposal_use_case import CreateProposalUseCase
+from apps.domain.usecases.list_professional_proposals_use_case import ListProfessionalProposalsUseCase
 from apps.infrastructure.repositories.django_client_repository import DjangoClientRepository
 from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
 from apps.infrastructure.repositories.django_proposal_repository import DjangoProposalRepository
 from apps.infrastructure.repositories.django_service_repository import DjangoServiceRepository
-from apps.interface_adapters.api.v1.serializers.proposal_serializer import ProposalSerializer
+from apps.interface_adapters.api.v1.serializers.proposal_serializer import ListProposalsSerializer, ProposalSerializer
 
 
 class ProfessionalProposalView(APIView):
@@ -40,3 +41,14 @@ class ProfessionalProposalView(APIView):
             )
 
         return Response(None, status=status.HTTP_201_CREATED)
+
+    def get(self, request):
+        professional_id = request.user.id
+        use_case = ListProfessionalProposalsUseCase(
+            proposal_repository=DjangoProposalRepository(),
+            professional_repository=DjangoProfessionalRepository(),
+        )
+        proposals = use_case.list_all(professional_id)
+
+        serializer = ListProposalsSerializer(proposals, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

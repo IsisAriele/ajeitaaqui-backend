@@ -4,6 +4,25 @@ from apps.infrastructure.models import ProposalModel, ProposalServiceModel
 
 
 class DjangoProposalRepository(ProposalRepository):
+    def list_proposals_by_professional(self, professional_id: str):
+        proposals = list()
+        proposal_models = ProposalModel.objects.filter(professional_id=professional_id)
+
+        for proposal_model in proposal_models:
+            services = [service.service for service in proposal_model.proposal_services.all()]
+            proposal = Proposal(
+                id=proposal_model.id,
+                confirmed=proposal_model.confirmed,
+                value=proposal_model.value,
+                scheduled_datetime=proposal_model.scheduled_datetime,
+                client=proposal_model.client,
+                professional=proposal_model.professional,
+                services=services,
+            )
+            proposals.append(proposal)
+
+        return proposals
+
     def create(self, proposal: Proposal) -> Proposal:
         proposal_model = ProposalModel.objects.create(
             confirmed=proposal.confirmed,
