@@ -8,6 +8,8 @@ from apps.infrastructure.models import (
     PortfolioModel,
     PortfolioServiceModel,
     ProfessionalModel,
+    ProposalModel,
+    ProposalServiceModel,
     ServiceModel,
 )
 
@@ -18,3 +20,5 @@ admin.site.register(PlanModel)
 admin.site.register(ProfessionalModel)
 admin.site.register(PortfolioModel)
 admin.site.register(PortfolioServiceModel)
+admin.site.register(ProposalModel)
+admin.site.register(ProposalServiceModel)
