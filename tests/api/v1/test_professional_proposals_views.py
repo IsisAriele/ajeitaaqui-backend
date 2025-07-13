@@ -43,6 +43,16 @@ class ProfessionalProposalsViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(ProposalModel.objects.filter(client=self.client_model, professional=self.professional).exists())
 
+    def test_create_proposal_client_not_found(self):
+        proposal_data = {
+            "client_id": 999,
+            "services": [self.service.id],
+            "value": 100.00,
+            "scheduled_datetime": datetime.now().isoformat(),
+        }
+        response = self.api_client.post(self.url, proposal_data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_proposal_invalid_data(self):
         proposal_data = {}
         response = self.api_client.post(self.url, proposal_data, format="json")

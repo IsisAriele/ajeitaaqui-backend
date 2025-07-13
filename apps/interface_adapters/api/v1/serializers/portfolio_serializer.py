@@ -25,23 +25,3 @@ class PortfolioDetailSerializer(serializers.Serializer):
     description = serializers.CharField()
     image_url = serializers.CharField(required=False, allow_blank=True, allow_null=True)
     services = ServiceSerializer(many=True)
-
-    def to_entity(self, client_id: int) -> Portfolio:
-        return Portfolio(
-            id=self.validated_data.get("id"),
-            professional_id=client_id,
-            description=self.validated_data.get("description"),
-            image_url=self.validated_data.get("image_url"),
-            services=self.validated_data.get("services"),
-        )
-
-    @classmethod
-    def from_entity(cls, portfolio: Portfolio):
-        data = {
-            "id": portfolio.id,
-            "professional_id": portfolio.professional_id,
-            "description": portfolio.description,
-            "image_url": portfolio.image_url,
-            "services": [ServiceSerializer(service).data for service in portfolio.services],
-        }
-        return cls(data)

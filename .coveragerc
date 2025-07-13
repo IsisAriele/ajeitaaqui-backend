@@ -1,0 +1,13 @@
+[run]
+omit =
+    tests/*
+    manage.py
+    apps/infrastructure/migrations/*
+    apps/infrastructure/models/*
+    
+[report]
+exclude_lines =
+    @abstractmethod
+    raise NotImplementedError
+    if __name__ == .__main__.:
+    pragma: no cover

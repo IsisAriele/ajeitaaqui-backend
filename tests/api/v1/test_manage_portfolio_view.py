@@ -53,6 +53,14 @@ class ManagePortfolioViewsTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    def test_create_portfolio_invalid_data(self):
+        response = self.api_client.post(
+            self.url,
+            data={},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_create_portfolio_professional_not_found(self):
         client_without_professional_model = ClientModel.objects.create(
             id="2",
@@ -187,3 +195,11 @@ class ManagePortfolioViewsTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("message", response.data)
         self.assertEqual(response.data["message"], "Service with id 999 does not exist.")
+
+    def test_update_portfolio_invalid_data(self):
+        response = self.api_client.put(
+            self.url,
+            data={},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
