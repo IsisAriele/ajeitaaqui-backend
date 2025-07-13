@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from django.test import TestCase
+from django.utils import timezone
 
 from apps.domain.entities.proposal import ProposalStatus
 from apps.domain.usecases.reject_proposal_use_case import RejectProposalUseCase
@@ -33,7 +32,7 @@ class RejectProposalUseCaseIntegrationTest(TestCase):
             client=self.client_user,
             professional=self.professional,
             value=100.0,
-            scheduled_datetime=datetime(2025, 7, 12, 10, 0, 0),
+            scheduled_datetime=timezone.now(),
         )
         ProposalServiceModel.objects.create(
             proposal=self.proposal,

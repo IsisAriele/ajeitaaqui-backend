@@ -9,6 +9,10 @@ class ProposalRepository(ABC):
         pass
 
     @abstractmethod
+    def get(self, client_id: str, proposal_id: str) -> Proposal:
+        pass
+
+    @abstractmethod
     def list_proposals_by_professional(self, professional_id: str):
         pass
 
@@ -18,4 +22,8 @@ class ProposalRepository(ABC):
 
     @abstractmethod
     def reject_proposal(self, client_id: str, proposal_id: str) -> None:
+        pass
+
+    @abstractmethod
+    def accept_proposal(self, client_id: str, proposal_id: str) -> None:
         pass
