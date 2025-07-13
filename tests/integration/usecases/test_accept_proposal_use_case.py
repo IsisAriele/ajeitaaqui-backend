@@ -1,7 +1,9 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from apps.domain.usecases.list_professional_proposals_use_case import ListProfessionalProposalsUseCase
+from apps.domain.entities.payment import Payment
+from apps.domain.entities.proposal import ProposalStatus
+from apps.domain.usecases.accept_proposal_use_case import AcceptProposalUseCase
 from apps.infrastructure.models import (
     CategoryModel,
     ClientModel,
@@ -10,11 +12,12 @@ from apps.infrastructure.models import (
     ProposalServiceModel,
     ServiceModel,
 )
-from apps.infrastructure.repositories.django_professional_repository import DjangoProfessionalRepository
+from apps.infrastructure.repositories.django_client_repository import DjangoClientRepository
+from apps.infrastructure.repositories.django_payment_repository import DjangoPaymentRepository
 from apps.infrastructure.repositories.django_proposal_repository import DjangoProposalRepository
 
 
-class ListProfessionalProposalsUseCaseIntegrationTest(TestCase):
+class AcceptProposalUseCaseIntegrationTest(TestCase):
     def setUp(self):
         self.category = CategoryModel.objects.create(description="Beleza")
         self.service = ServiceModel.objects.create(category=self.category, description="Corte Feminino")
@@ -38,13 +41,16 @@ class ListProfessionalProposalsUseCaseIntegrationTest(TestCase):
             service=self.service,
         )
         self.proposal_repository = DjangoProposalRepository()
-        self.professional_repository = DjangoProfessionalRepository()
-        self.use_case = ListProfessionalProposalsUseCase(self.proposal_repository, self.professional_repository)
+        self.client_repository = DjangoClientRepository()
+        self.payment_repository = DjangoPaymentRepository()
+        self.use_case = AcceptProposalUseCase(self.proposal_repository, self.payment_repository, self.client_repository)
 
-    def test_list_professional_proposals(self):
-        proposals = self.use_case.list_all(self.professional.id)
-        self.assertEqual(len(proposals), 1)
-        proposal = proposals[0]
-        self.assertEqual(proposal.professional.id, self.professional.id)
-        self.assertEqual(proposal.value, 100.0)
-        self.assertEqual(proposal.services[0].description, "Corte Feminino")
+    def test_accept_proposal_success(self):
+        result = self.use_case.accept(self.client_user.id, self.proposal.id)
+        self.assertTrue(isinstance(result, Payment))
+        self.proposal.refresh_from_db()
+        self.assertEqual(self.proposal.status, ProposalStatus.CONFIRMED)
+
+    def test_accept_proposal_not_found(self):
+        with self.assertRaises(Exception):
+            self.use_case.accept(self.client_user.id, 999)

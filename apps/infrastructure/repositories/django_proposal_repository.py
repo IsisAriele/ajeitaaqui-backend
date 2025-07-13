@@ -70,3 +70,27 @@ class DjangoProposalRepository(ProposalRepository):
             proposal.save()
         except ProposalModel.DoesNotExist:
             raise ValueError("Proposal not found or does not belong to the client.")
+
+    def get(self, client_id: str, proposal_id: str) -> Proposal:
+        try:
+            proposal_model = ProposalModel.objects.get(id=proposal_id, client_id=client_id)
+            services = [service.service for service in proposal_model.proposal_services.all()]
+            return Proposal(
+                id=proposal_model.id,
+                status=proposal_model.status,
+                value=proposal_model.value,
+                scheduled_datetime=proposal_model.scheduled_datetime,
+                client=proposal_model.client,
+                professional=proposal_model.professional,
+                services=services,
+            )
+        except ProposalModel.DoesNotExist:
+            raise ValueError("Proposal not found or does not belong to the client.")
+
+    def accept_proposal(self, client_id: str, proposal_id: str):
+        try:
+            proposal = ProposalModel.objects.get(id=proposal_id, client_id=client_id, status=ProposalStatus.PENDING)
+            proposal.status = ProposalStatus.CONFIRMED
+            proposal.save()
+        except ProposalModel.DoesNotExist:
+            raise ValueError("Proposal not found or does not belong to the client.")

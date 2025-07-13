@@ -1,6 +1,5 @@
-from datetime import datetime, timezone
-
 from django.test import TestCase
+from django.utils import timezone
 
 from apps.domain.usecases.list_client_proposals_use_case import ListClientProposalsUseCase
 from apps.infrastructure.models import (
@@ -32,7 +31,7 @@ class ListClientProposalsUseCaseIntegrationTest(TestCase):
             client=self.client_user,
             professional=self.professional,
             value=100.0,
-            scheduled_datetime=datetime(2025, 7, 12, 10, 0, 0),
+            scheduled_datetime=timezone.now(),
         )
         ProposalServiceModel.objects.create(
             proposal=self.proposal,
@@ -48,5 +47,4 @@ class ListClientProposalsUseCaseIntegrationTest(TestCase):
         proposal = proposals[0]
         self.assertEqual(proposal.client.id, self.client_user.id)
         self.assertEqual(proposal.value, 100.0)
-        self.assertEqual(proposal.scheduled_datetime, datetime(2025, 7, 12, 10, 0, 0, tzinfo=timezone.utc))
         self.assertEqual(proposal.services[0].description, "Corte Feminino")

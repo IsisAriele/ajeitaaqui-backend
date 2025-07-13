@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
@@ -58,12 +59,12 @@ class ProfessionalProposalsViewTests(APITestCase):
         self.assertFalse(ProposalModel.objects.filter(client=self.client_model, professional=self.professional))
 
     def test_list_professional_proposals_success(self):
-        # Cria uma proposta para o profissional autenticado
+        now = timezone.now()
         proposal = ProposalModel.objects.create(
             client=self.client_model,
             professional=self.professional,
             value=150.0,
-            scheduled_datetime=datetime(2025, 7, 12, 10, 0, 0),
+            scheduled_datetime=now,
         )
         ProposalServiceModel.objects.create(
             proposal=proposal,
@@ -73,7 +74,7 @@ class ProfessionalProposalsViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]["value"], 150.0)
-        self.assertEqual(response.data[0]["scheduled_datetime"], "2025-07-12T10:00:00Z")
+        self.assertEqual(response.data[0]["scheduled_datetime"], now.strftime("%Y-%m-%dT%H:%M:%S.%fZ"))
         self.assertEqual(response.data[0]["services"][0]["description"], "Corte Feminino")
 
     def test_list_professional_proposals_empty(self):

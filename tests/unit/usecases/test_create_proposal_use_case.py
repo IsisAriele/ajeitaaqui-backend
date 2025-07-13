@@ -46,7 +46,6 @@ class TestCreateProposalUseCase(unittest.TestCase):
         self.mock_service_repository.get_by_id.assert_any_call(20)
         self.mock_proposal_repository.create.assert_called_once()
         self.assertEqual(result, proposal)
-        # Verifica se proposal foi atualizado corretamente
         self.assertEqual(proposal.client, client_obj)
         self.assertEqual(proposal.professional, professional_obj)
         self.assertEqual(proposal.services, [service_obj_1, service_obj_2])
