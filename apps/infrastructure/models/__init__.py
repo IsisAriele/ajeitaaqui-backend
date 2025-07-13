@@ -1,3 +1,4 @@
+from apps.infrastructure.models.payment_models import *  # noqa
 from apps.infrastructure.models.plan_models import *  # noqa
 from apps.infrastructure.models.portfolio_models import *  # noqa
 from apps.infrastructure.models.professional_models import *  # noqa

@@ -21,7 +21,7 @@ class ListProposalsSerializer(serializers.Serializer):
     scheduled_datetime = serializers.DateTimeField(read_only=True)
     client = SimpleClientSerializer(read_only=True)
     services = serializers.ListField(child=SimplesServiceSerializer(), read_only=True)
-    confirmed = serializers.BooleanField(read_only=True)
+    status = serializers.CharField(read_only=True)
 
 
 class ProposalSerializer(serializers.Serializer):
@@ -31,7 +31,7 @@ class ProposalSerializer(serializers.Serializer):
     client_id = serializers.IntegerField()
     professional_id = serializers.IntegerField()
     services = serializers.ListField(child=serializers.IntegerField(), write_only=True)
-    confirmed = serializers.BooleanField(default=False)
+    status = serializers.CharField(read_only=True)
 
     def to_entity(self) -> Proposal:
         return Proposal(
@@ -65,5 +65,5 @@ class ProposalSerializer(serializers.Serializer):
                 country=None,
             ),
             services=self.validated_data.get("services", []),
-            confirmed=self.validated_data.get("confirmed", False),
+            status=self.validated_data.get("status", False),
         )

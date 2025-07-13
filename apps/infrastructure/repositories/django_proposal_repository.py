@@ -1,4 +1,4 @@
-from apps.domain.entities.proposal import Proposal
+from apps.domain.entities.proposal import Proposal, ProposalStatus
 from apps.domain.interfaces.repositories.proposal_repository import ProposalRepository
 from apps.infrastructure.models import ProposalModel, ProposalServiceModel
 
@@ -12,7 +12,7 @@ class DjangoProposalRepository(ProposalRepository):
             services = [service.service for service in proposal_model.proposal_services.all()]
             proposal = Proposal(
                 id=proposal_model.id,
-                confirmed=proposal_model.confirmed,
+                status=proposal_model.status,
                 value=proposal_model.value,
                 scheduled_datetime=proposal_model.scheduled_datetime,
                 client=proposal_model.client,
@@ -31,7 +31,7 @@ class DjangoProposalRepository(ProposalRepository):
             services = [service.service for service in proposal_model.proposal_services.all()]
             proposal = Proposal(
                 id=proposal_model.id,
-                confirmed=proposal_model.confirmed,
+                status=proposal_model.status,
                 value=proposal_model.value,
                 scheduled_datetime=proposal_model.scheduled_datetime,
                 client=proposal_model.client,
@@ -44,7 +44,6 @@ class DjangoProposalRepository(ProposalRepository):
 
     def create(self, proposal: Proposal) -> Proposal:
         proposal_model = ProposalModel.objects.create(
-            confirmed=proposal.confirmed,
             value=proposal.value,
             scheduled_datetime=proposal.scheduled_datetime,
             client_id=proposal.client.id,
@@ -56,10 +55,18 @@ class DjangoProposalRepository(ProposalRepository):
 
         return Proposal(
             id=proposal_model.id,
-            confirmed=proposal_model.confirmed,
+            status=proposal_model.status,
             value=proposal_model.value,
             scheduled_datetime=proposal_model.scheduled_datetime,
             client=proposal.client,
             professional=proposal.professional,
             services=[service for service in proposal.services],
         )
+
+    def reject_proposal(self, client_id: str, proposal_id: str):
+        try:
+            proposal = ProposalModel.objects.get(id=proposal_id, client_id=client_id, status=ProposalStatus.PENDING)
+            proposal.status = ProposalStatus.REJECTED
+            proposal.save()
+        except ProposalModel.DoesNotExist:
+            raise ValueError("Proposal not found or does not belong to the client.")

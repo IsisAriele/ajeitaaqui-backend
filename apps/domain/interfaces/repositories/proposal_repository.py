@@ -15,3 +15,7 @@ class ProposalRepository(ABC):
     @abstractmethod
     def list_proposals_by_client(self, client_id: str):
         pass
+
+    @abstractmethod
+    def reject_proposal(self, client_id: str, proposal_id: str) -> None:
+        pass
