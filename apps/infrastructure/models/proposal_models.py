@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
+from apps.domain.entities.proposal import ProposalStatus
 from apps.infrastructure.models.professional_models import ProfessionalModel
 from apps.infrastructure.models.service_models import ServiceModel
 from apps.infrastructure.models.user_models import ClientModel
@@ -10,7 +11,10 @@ from apps.infrastructure.models.user_models import ClientModel
 class ProposalModel(models.Model):
     client = models.ForeignKey(ClientModel, on_delete=models.CASCADE, related_name="proposals")
     professional = models.ForeignKey(ProfessionalModel, on_delete=models.CASCADE, related_name="proposals")
-    confirmed = models.BooleanField(default=False)
+    status = models.CharField(
+        max_length=20,
+        default=ProposalStatus.PENDING,
+    )
     value = models.DecimalField(max_digits=10, decimal_places=2)
     scheduled_datetime = models.DateTimeField(default=datetime.now)
 
