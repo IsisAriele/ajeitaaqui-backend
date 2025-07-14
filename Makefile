@@ -4,8 +4,5 @@ format:
 	black -l 120 apps tests
 
 test:
-	python manage.py test
-
-coverage:
 	coverage run manage.py test
-	coverage report
+	coverage report --fail-under=90
