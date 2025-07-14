@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,6 +14,10 @@ class DetailClientView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={200: ClientSerializer, 404: {"message": "Not found"}},
+    )
     def get(self, request, client_id):
         client_repository = DjangoClientRepository()
         use_case = DetailClientUseCase(client_repository)

@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -9,6 +10,25 @@ from apps.interface_adapters.api.v1.serializers.portfolio_serializer import Port
 
 
 class SearchPortfolioView(APIView):
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="q", type=str, location=OpenApiParameter.QUERY, required=True, description="Texto da busca"
+            ),
+            OpenApiParameter(
+                name="type",
+                type=str,
+                location=OpenApiParameter.QUERY,
+                required=True,
+                description="Tipo da busca: 'service' ou 'professional'",
+                enum=["service", "professional"],
+            ),
+        ],
+        responses={
+            200: PortfolioDetailSerializer(many=True),
+            400: {"message": "Invalid data"},
+        },
+    )
     def get(self, request):
         query = request.query_params.get("q")
         search_type = request.query_params.get("type")  # 'service' ou 'professional'

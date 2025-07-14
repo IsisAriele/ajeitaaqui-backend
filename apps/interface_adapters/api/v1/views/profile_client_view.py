@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,6 +14,14 @@ class ProfileClientView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=ClientSerializer,
+        responses={
+            200: {"message": "Client updated successfully"},
+            400: {"message": "Invalid data"},
+            409: {"message": "Conflict"},
+        },
+    )
     def put(self, request):
         client_id = request.user.id
         serializer = ClientSerializer(data=request.data)

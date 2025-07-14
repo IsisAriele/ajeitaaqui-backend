@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,6 +16,10 @@ class ManagePortfolioViews(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=PortfolioSerializer,
+        responses={201: {"message": "Portfolio created successfully"}, 400: {"message": "Invalid data"}},
+    )
     def post(self, request):
         client_id = request.user.id
 
@@ -44,6 +49,10 @@ class ManagePortfolioViews(APIView):
             status=status.HTTP_201_CREATED,
         )
 
+    @extend_schema(
+        request=PortfolioSerializer,
+        responses={200: {"message": "Portfolio updated successfully"}, 400: {"message": "Invalid data"}},
+    )
     def put(self, request):
         client_id = request.user.id
 

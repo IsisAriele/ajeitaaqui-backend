@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,6 +9,10 @@ from apps.interface_adapters.api.v1.serializers.category_serializer import Categ
 
 
 class ListCategoriesView(APIView):
+    @extend_schema(
+        request=None,
+        responses={200: CategorySerializer},
+    )
     def get(self, request):
         use_case = ListCategoriesUseCase(DjangoCategoryRepository())
         categories = use_case.list_categories()

@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,6 +17,10 @@ class ManageProposalsView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={204: None, 400: {"error": "Bad Request"}},
+    )
     def delete(self, request, proposal_id):
         client_id = request.user.id
         proposal_repository = DjangoProposalRepository()
@@ -29,6 +34,10 @@ class ManageProposalsView(APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(
+        request=None,
+        responses={200: PaymentSerializer, 400: {"error": "Bad Request"}},
+    )
     def post(self, request, proposal_id):
         client_id = request.user.id
         proposal_repository = DjangoProposalRepository()

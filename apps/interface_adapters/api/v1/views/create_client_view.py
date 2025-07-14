@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -9,6 +10,14 @@ from apps.interface_adapters.api.v1.serializers.client_serializer import ClientS
 
 
 class CreateClientView(APIView):
+    @extend_schema(
+        request=ClientSerializer,
+        responses={
+            201: {"message": "Client created successfully"},
+            409: {"message": "error"},
+            400: {"message": "Invalid data"},
+        },
+    )
     def post(self, request, *args, **kwargs):
         serializer = ClientSerializer(data=request.data)
 
