@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -18,6 +19,10 @@ class ProfessionalProposalView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=ProposalSerializer,
+        responses={201: {"message": "Proposal created successfully"}, 400: {"message": "Invalid data"}},
+    )
     def post(self, request):
         request.data["professional_id"] = request.user.id
         serializer = ProposalSerializer(data=request.data)
@@ -42,6 +47,10 @@ class ProfessionalProposalView(APIView):
 
         return Response(None, status=status.HTTP_201_CREATED)
 
+    @extend_schema(
+        request=None,
+        responses={200: ListProposalsSerializer(many=True)},
+    )
     def get(self, request):
         professional_id = request.user.id
         use_case = ListProfessionalProposalsUseCase(

@@ -55,15 +55,16 @@ python manage.py runserver
 
 ## Rodando os testes
 
---- # WIP
+Para executar os testes, certifique-se de que o ambiente virtual esteja ativado, todas as dependências instaladas e as migrações aplicadas ao banco de dados. Em seguida, execute o comando abaixo:
 
----
+```bash
+make test
+```
 
 ## Documentação da API
 
---- # WIP
-
----
+Para acessar as documentações, basta acessar no navegador: 
+[http://localhost:8000/docs/](http://localhost:8000/docs/)
 
 ## Observações futuras
 

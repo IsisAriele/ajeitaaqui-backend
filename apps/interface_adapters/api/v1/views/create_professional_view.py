@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -13,6 +14,10 @@ class CreateProfessionalView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        request=None,
+        responses={201: {"message": "Professional created successfully"}, 400: {"message": "Invalid data"}},
+    )
     def post(self, request):
         client_id = request.user.id
 

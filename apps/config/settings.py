@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.infrastructure",
     "apps.interface_adapters",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -134,4 +135,14 @@ MEDIA_URL = "/media/"
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Ajeita Aqui API RESTful",
+    "DESCRIPTION": "Documentação da API",
+    "VERSION": "1.0.0",
 }
